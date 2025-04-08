@@ -1,0 +1,23 @@
+from playwright.sync_api import sync_playwright
+
+def scrape_with_browser_profile(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+
+        # Load a real user data directory
+        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+
+        # Open a new page
+        page = context.new_page()
+
+        try:
+            page.goto(url, timeout=60000)
+            print(f"Page Title: {page.title()}")
+            print(page.content())
+        except Exception as e:
+            print(f"Error: {e}")
+        finally:
+            browser.close()
+
+# Example URL
+scrape_with_browser_profile("https://www.pokemoncenter.com/")

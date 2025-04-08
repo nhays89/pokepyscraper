@@ -1,0 +1,36 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Set up headless Chrome browser
+options = Options()
+options.add_argument("--headless")  # Run in headless mode (no GUI)
+options.add_argument("--disable-gpu")  # For better compatibility
+options.add_argument("--no-sandbox")  # Useful in some environments
+options.add_argument("--disable-dev-shm-usage")  # Fix shared memory issues
+
+# Create a Selenium WebDriver instance
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+print("printing driver capabilities " + str(driver.capabilities));
+print("print driver network conditions" + str(driver.get_network_conditions));
+
+# Open the website
+url = "https://www.pokemoncenter.com/"
+product_url_test = "https://www.pokemoncenter.com/product/176-80818/pokemon-tcg-sword-and-shield-battle-styles-booster-display-box-36-packs"
+
+driver.get(product_url_test)
+
+# Wait for JavaScript to load
+driver.implicitly_wait(10)  # Wait up to 10 seconds for elements to load
+
+# Extract buttons
+buttons = driver.find_elements(By.TAG_NAME, "button")
+print("printing buttons: ")
+for button in buttons:
+    print(f"Button Text: {button.text}")
+
+# Close the browser
+driver.quit()

@@ -1,0 +1,30 @@
+from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
+
+def scrape_with_playwright_stealth(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)  # Use headless=True for no GUI
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+            locale="en-US,en;q=0.9",
+            viewport={"width": 1280, "height": 720},
+        )
+        page = context.new_page()
+
+        # Apply stealth to avoid detection
+        stealth_sync(page)
+
+        # Go to the website
+        page.goto(url, timeout=100000)  # Increase timeout if needed
+
+        # Wait for the page to load completely
+        page.wait_for_load_state("domcontentloaded")
+
+        # Print the page title to verify it loaded correctly
+        print("page content" + page.content())
+
+        # Close the browser
+        browser.close()
+
+# Test the function
+scrape_with_playwright_stealth("https://www.pokemoncenter.com/")
