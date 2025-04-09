@@ -1,0 +1,6 @@
+services:
+  - type: cron
+    name: web-scraper-job
+    schedule: "@hourly"  # Or "@daily", "0 6 * * *", etc.
+    runtime: docker
+    dockerContext: .
